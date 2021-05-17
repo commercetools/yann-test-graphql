@@ -9206,7 +9206,7 @@ input StateUpdateAction {
 "[BETA] Stores allow defining different contexts for a project."
 type Store implements Versioned {
   id: String!
-  version: Long!
+  version2: Long!
   key: String!
   name(
     "String is defined for different locales. This argument specifies the desired locale."
@@ -9223,6 +9223,7 @@ type Store implements Versioned {
   createdAt: DateTime!
   lastModifiedAt: DateTime!
   custom: CustomFieldsType
+  version: Long!
   createdBy: Initiator
   lastModifiedBy: Initiator
 }
