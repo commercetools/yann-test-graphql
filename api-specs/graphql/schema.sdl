@@ -1921,6 +1921,28 @@ input CloudEventsSubscriptionsFormatInput {
   cloudEventsVersion: String!
 }
 
+type CommercetoolsSubscription implements Versioned {
+  key: String
+  destination: Destination!
+  messages: [MessageSubscription!]!
+  changes: [ChangeSubscription!]!
+  format: NotificationFormat!
+  status: SubscriptionHealthStatus!
+  id: String!
+  version: Long!
+  createdAt: DateTime!
+  lastModifiedAt: DateTime!
+  createdBy: Initiator
+  lastModifiedBy: Initiator
+}
+
+type CommercetoolsSubscriptionQueryResult {
+  offset: Int!
+  count: Int!
+  total: Long!
+  results: [CommercetoolsSubscription!]!
+}
+
 "[ISO 3166-1](http://en.wikipedia.org/wiki/ISO_3166-1) country code."
 scalar Country
 
@@ -4410,21 +4432,21 @@ type Mutation {
 
     "Queries with specified key"
     key: String): Review
-  createSubscription(draft: SubscriptionDraft!): SubscriptionType
+  createSubscription(draft: SubscriptionDraft!): CommercetoolsSubscription
   updateSubscription(version: Long!, actions: [SubscriptionUpdateAction!]!,
 
     "Queries with specified ID"
     id: String,
 
     "Queries with specified key"
-    key: String): SubscriptionType
+    key: String): CommercetoolsSubscription
   deleteSubscription(version: Long!,
 
     "Queries with specified ID"
     id: String,
 
     "Queries with specified key"
-    key: String): SubscriptionType
+    key: String): CommercetoolsSubscription
   createExtension(draft: ExtensionDraft!): Extension
   updateExtension(version: Long!, actions: [ExtensionUpdateAction!]!,
 
@@ -5912,7 +5934,7 @@ type ProductVariant {
   prices: [ProductPrice!]
 
   "Returns a single price based on the price selection rules."
-  price(currency: Currency!, country: Country, customerGroupId: String, channelId: String, date: DateTime): ProductPrice
+  price(currency: Currency, country: Country!, customerGroupId: String, channelId: String, date: DateTime): ProductPrice
   images: [Image!]!
   assets: [Asset!]!
   availability: ProductVariantAvailabilityWithChannels
@@ -6321,8 +6343,8 @@ type Query implements CartQueryInterface & CustomerActiveCartInterface & OrderQu
     id: String,
 
     "Queries with specified key"
-    key: String): SubscriptionType
-  subscriptions(where: String, sort: [String!], limit: Int, offset: Int): SubscriptionTypeQueryResult!
+    key: String): CommercetoolsSubscription
+  subscriptions(where: String, sort: [String!], limit: Int, offset: Int): CommercetoolsSubscriptionQueryResult!
   extension(
     "Queries with specified ID"
     id: String,
@@ -9298,28 +9320,6 @@ enum SubscriptionHealthStatus {
   ConfigurationErrorDeliveryStopped
   ConfigurationError
   Healthy
-}
-
-type SubscriptionType implements Versioned {
-  key: String
-  destination: Destination!
-  messages: [MessageSubscription!]!
-  changes: [ChangeSubscription!]!
-  format: NotificationFormat!
-  status: SubscriptionHealthStatus!
-  id: String!
-  version: Long!
-  createdAt: DateTime!
-  lastModifiedAt: DateTime!
-  createdBy: Initiator
-  lastModifiedBy: Initiator
-}
-
-type SubscriptionTypeQueryResult {
-  offset: Int!
-  count: Int!
-  total: Long!
-  results: [SubscriptionType!]!
 }
 
 input SubscriptionUpdateAction {

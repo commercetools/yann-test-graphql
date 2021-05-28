@@ -1,0 +1,50 @@
+---
+date: '2021-05-28'
+title: Changes in the GraphQL schema
+description: ...
+type: enhancement
+topics:
+  - GraphQL
+---
+
+Changes:
+- [GraphQL API] Added the following types to the GraphQL schema: `CommercetoolsSubscription`, `CommercetoolsSubscriptionQueryResult`.
+- [GraphQL API] Removed the following types from the GraphQL schema: `SubscriptionType`, `SubscriptionTypeQueryResult`.
+- [GraphQL API] Changed the `ProductVariant` type:
+  - `ProductVariant.price(currency)` type changed from `Currency!` to `Currency`
+  - `ProductVariant.price(country)` type changed from `Country` to `Country!`
+- [GraphQL API] Changed the `Query` type:
+  - `Query.subscriptions` field type changed from `SubscriptionTypeQueryResult!` to `CommercetoolsSubscriptionQueryResult!`
+  - `Query.subscription` field type changed from `SubscriptionType` to `CommercetoolsSubscription`
+- [GraphQL API] Changed the `Mutation` type:
+  - `Mutation.createSubscription` field type changed from `SubscriptionType` to `CommercetoolsSubscription`
+  - `Mutation.deleteSubscription` field type changed from `SubscriptionType` to `CommercetoolsSubscription`
+  - `Mutation.updateSubscription` field type changed from `SubscriptionType` to `CommercetoolsSubscription`
+
+<!--more-->
+
+The following changes were introduced in terms of GraphQL SDL:
+
+```
+type CommercetoolsSubscription implements Versioned {
+  key: String
+  destination: Destination!
+  messages: [MessageSubscription!]!
+  changes: [ChangeSubscription!]!
+  format: NotificationFormat!
+  status: SubscriptionHealthStatus!
+  id: String!
+  version: Long!
+  createdAt: DateTime!
+  lastModifiedAt: DateTime!
+  createdBy: Initiator
+  lastModifiedBy: Initiator
+}
+
+type CommercetoolsSubscriptionQueryResult {
+  offset: Int!
+  count: Int!
+  total: Long!
+  results: [CommercetoolsSubscription!]!
+}
+```
